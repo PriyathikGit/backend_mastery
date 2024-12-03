@@ -1,0 +1,19 @@
+{
+  "name": "main_backend_project",
+  "version": "1.0.0",
+  "description": "backend project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs"
+  ],
+  "author": "priyathik (rohan)",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
