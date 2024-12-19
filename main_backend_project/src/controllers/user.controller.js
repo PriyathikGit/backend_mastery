@@ -6,8 +6,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, username, password } = req.body;
-  console.log("fullName: ", fullName);
-  console.log(typeof email);
+  // console.log(req.body);
 
   // if any of the fields is invalid, then throw error
   if (
@@ -20,22 +19,31 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "valid email required");
   }
   // if user is already existed, then throw error
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     // if username or email exist in user collection, then its already existed
     $or: [{ username }, { email }],
   });
-  console.log(existedUser);
+  // console.log(existedUser);
 
   if (existedUser) {
     throw new ApiError(409, "username or email or already exist");
   }
 
-
-  console.log(req.files);
+  // console.log(req.files);
 
   // retreiving the path of the file, this is temporary uploaded in local system(our machine)
   const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  // const coverImageLocalPath = req.files?.coverImage[0]?.path;
+
+  let coverImageLocalPath;
+
+  if (
+    req.files &&
+    Array.isArray(req.files.coverImage) &&
+    req.files.coverImage.length > 0
+  ) {
+    coverImageLocalPath = req.files.coverImage[0].path;
+  }
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "avatar file is required");
@@ -60,7 +68,7 @@ const registerUser = asyncHandler(async (req, res) => {
     username: username.toLowerCase(),
   });
 
-  // removing some fields from the user data 
+  // removing some fields from the user data
   const createdUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
@@ -69,7 +77,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!createdUser) {
     throw new ApiError(500, "something went wrong while registering the user");
   }
-  
+
   // returning response
   const response = res
     .status(201)
