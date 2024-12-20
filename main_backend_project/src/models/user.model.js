@@ -75,7 +75,7 @@ userSchema.methods.genrateAccessToken = function () {
     }
   );
 };
-userSchema.methods.refreshRefreshToken = function () {
+userSchema.methods.refreshToken = function () {
   return jwt.sign(
     {
       _id: this._id,
