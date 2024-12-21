@@ -8,7 +8,7 @@ const genrateAccessAndRefreshToken = async (userId) => {
   try {
     const user = await User.findById(userId);
     const accessToken = user.genrateAccessToken();
-    const refreshToken = user.refreshToken();
+    const refreshToken = user.genrateRefreshToken();
 
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
@@ -111,9 +111,15 @@ const loginUser = asyncHandler(async (req, res) => {
   // genrate access and refresh token
   // send via cookies
 
-  const { username, email, password } = req.body;
-
-  if (!username || !email) {
+  console.log(req.body);
+  const { email, username, password } = req.body;
+  
+  console.log(email);
+  console.log(username);
+  console.log(password);
+  
+  
+  if (!username && !email) {
     throw new ApiError(400, "username or email is required");
   }
 
@@ -161,7 +167,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  await User.findByIdAndDelete(
+  await User.findByIdAndUpdate(
     req.user._id,
     {
       $set: {
