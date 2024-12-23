@@ -199,6 +199,13 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new ApiError(401, "unauthorized token");
   }
 
+  // algo of it
+  // decode the token which come from user and original token in data
+  // check if user exist and token expiration
+  // genrate new access and refresh token
+  // send the refresh token again as cookie or json
+
+
   try {
     const decodedToken = jwt.verify(incomingRefreshToken, REFRESH_TOKEN_SECRET);
 
