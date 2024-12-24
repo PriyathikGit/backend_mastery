@@ -115,10 +115,6 @@ const loginUser = asyncHandler(async (req, res) => {
   console.log(req.body);
   const { email, username, password } = req.body;
 
-  console.log(email);
-  console.log(username);
-  console.log(password);
-
   if (!username && !email) {
     throw new ApiError(400, "username or email is required");
   }
@@ -245,9 +241,14 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
-
+  if (!oldPassword || !newPassword) {
+    throw new ApiError(400, "Old password and new password are required.");
+  }
   // user is already login, so get the id from body(because jwt verification)
   const user = await User.findById(req.user?._id);
+  if (!user) {
+    throw new ApiError(404, "User not found.");
+  }
   const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
   if (!isPasswordCorrect) {
     throw new ApiError(404, "Invalid Password");
@@ -268,8 +269,10 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const updateAccoundDetail = asyncHandler(async (req, res) => {
+  console.log("update account detail endpoint runng");
+  
   const { fullName, email } = req.body;
-
+  
   if (!fullName || !email) {
     throw new ApiError(400, "All fields are required");
   }
@@ -291,6 +294,8 @@ const updateAccoundDetail = asyncHandler(async (req, res) => {
 });
 
 const updateUserAvatar = asyncHandler(async (req, res) => {
+  console.log(req.file);
+  
   const avatarLocalPath = req.file?.path;
 
   if (!avatarLocalPath) {
@@ -352,5 +357,5 @@ export {
   getCurrentUser,
   updateAccoundDetail,
   updateUserAvatar,
-  updateUserCoverImage
+  updateUserCoverImage,
 };

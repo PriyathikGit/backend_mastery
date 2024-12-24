@@ -58,6 +58,11 @@ userSchema.pre("save", async function (next) {
 
 // password checker method
 userSchema.methods.isPasswordCorrect = async function (password) {
+
+  if (!this.password) {
+    throw new Error("Password is missing from user document.");
+  }
+  
   return bcrypt.compare(password, this.password);
 };
 
