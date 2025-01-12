@@ -33,6 +33,11 @@ app.use(cookieParser());
 import userRouter from "./routes/user.routes.js";
 
 // routes declaration
+// all users related routes
 app.use("/api/v1/users", userRouter); // end point example : http://localhost:8000/api/v1/users/register
+
+import videoRouter from "./routes/video.routes.js";
+
+app.use("/api/v1/videos", videoRouter);
 
 export { app };
