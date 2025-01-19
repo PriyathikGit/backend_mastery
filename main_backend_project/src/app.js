@@ -36,8 +36,14 @@ import userRouter from "./routes/user.routes.js";
 // all users related routes
 app.use("/api/v1/users", userRouter); // end point example : http://localhost:8000/api/v1/users/register
 
+// video routes
 import videoRouter from "./routes/video.routes.js";
 
 app.use("/api/v1/videos", videoRouter);
+
+// tweet routes
+import twitterRouter from "./routes/tweet.routes.js";
+
+app.use("/api/v1/tweet", twitterRouter);
 
 export { app };
